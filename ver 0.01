@@ -1,28 +1,24 @@
-// пятнашки
-
-#include "pch.h" 
+#include "pch.h"
 #include <iostream>
-#include <stdio.h>
-#include <string>
-#include <fstream>
-#include <Windows.h>
 #include <time.h>
+#include <math.h>
+#include <conio.h>
 
 
 using namespace std;
 
 const int N = 4;
 int game_plays[N][N];
-int x, y,c = 0, k = 0;
+int x, y, c = 0, k ;
 int *px = &x, *py = &y;
 int *pk = &k;
-char Step;
+char Step = _getch();
 
 void InGame_plays();
 void ShowGame_plays();
 void MixGame_plays();
 void ShowGame_plays();
-bool GameWin();
+void GameWin();
 void GamePlay();
 void GameStep();
 
@@ -47,6 +43,8 @@ int main()
 		GameWin();
 	} while (*pk != 16);
 
+	cout << "YOU WIN" << endl;
+
 }
 
 void InGame_plays() {
@@ -65,7 +63,7 @@ void InGame_plays() {
 
 void ShowGame_plays() {
 	cout << endl;
-	
+
 	for (int i = 0; i < N; i++)
 	{
 		cout << "|\t";
@@ -90,11 +88,11 @@ void MixGame_plays() {
 		{
 			for (int j = 0; j < N; j++)
 			{
-				x1 = rand() % 4;
-				y1 = rand() % 4;
-				x2 = rand() % 4;
-				y2 = rand() % 4;
-	
+				x1 = rand() % 2;
+				y1 = rand() % 2;
+				x2 = rand() % 2;
+				y2 = rand() % 2;
+
 				temp = game_plays[x1][y1];
 				game_plays[x1][y1] = game_plays[x2][y2];
 				game_plays[x2][y2] = temp;
@@ -112,73 +110,77 @@ void MixGame_plays() {
 
 			}
 		}
-		
+
 	} while (t != 200);
 }
 
-bool GameWin() {
-	
-	int game_win[N][N]{ {1,2,3,4} ,{5,6,7,8}, {9,10,11,12} ,{13,14,15,0} };
+void GameWin() {
 
+	int game_win[N][N]{ {1,2,3,4} ,{5,6,7,8}, {9,10,11,12} ,{13,14,15,0} };
+	*pk = 0;
 	for (int i = 0; i < N; i++)
 	{
 		for (int j = 0; j < N; j++)
 		{
-			if (game_win[i][j] == game_win[i][j]) {
-				*pk++;
+			if (game_plays[i][j] == game_win[i][j]) {
+				*pk = *pk + 1;
 			}
 		}
 	}
-
-	if (k == 16) {
+	cout << "pk = " << *pk << endl;
+	/*if (k == 16) {
 		return true;
 	}
 	else {
 		return false;
-	}
+	}*/
 }
 
 void GameStep() {
 	int temp;
 	
-	cout << "\nUp\t- w\nDown\t- s\nLeft\t- a\nRight\t- d" << endl; cin >> Step;
-	switch (Step)
+	cout << "\nUp\t- w\nDown\t- s\nLeft\t- a\nRight\t- d" << endl; 
+	//char symbol = _getch();
+	switch (char Step = _getch())
 	{
-	case 'w':
+	case (char)72:
 		if (*px != 0) {
 			//*px = *px - 1;
 			temp = game_plays[*px][*py];
 			game_plays[*px][*py] = game_plays[*px - 1][*py];
 			game_plays[*px - 1][*py] = temp;
 			*px = *px - 1;
-			
+			GameWin();
 		}
 		break;
-	case 's':
+	case (char)80:
 		if (*px != 3) {
 			//*px = *px + 1;
 			temp = game_plays[*px][*py];
 			game_plays[*px][*py] = game_plays[*px + 1][*py];
 			game_plays[*px + 1][*py] = temp;
 			*px = *px + 1;
+			GameWin();
 		}
 		break;
-	case 'a':
+	case (char)75:
 		if (*py != 0) {
 			//*py = *py - 1;
 			temp = game_plays[*px][*py];
-			game_plays[*px][*py] = game_plays[*px][*py-1];
-			game_plays[*px][*py-1] = temp;
+			game_plays[*px][*py] = game_plays[*px][*py - 1];
+			game_plays[*px][*py - 1] = temp;
 			*py = *py - 1;
+			GameWin();
 		}
 		break;
-	case 'd':
+	case (char)77:
 		if (*py != 3) {
 			//*py = *py + 1;
 			temp = game_plays[*px][*py];
-			game_plays[*px][*py] = game_plays[*px][*py+1];
-			game_plays[*px][*py+1] = temp;
+			game_plays[*px][*py] = game_plays[*px][*py + 1];
+			game_plays[*px][*py + 1] = temp;
 			*py = *py + 1;
+			GameWin();
 		}
 		break;
 	default:
